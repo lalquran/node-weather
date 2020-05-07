@@ -29,6 +29,9 @@ const getForecast = (req, res) => {
                     error
                 })
             }
+
+            forecast = 'It is currently ' + forecast.temperature + ' degrees fahrenheit in ' +
+            location + '. There is ' + forecast.rain + ' chance of rain.'
     
             res.send ({
                 location,
