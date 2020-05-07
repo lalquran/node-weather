@@ -1,0 +1,71 @@
+const request = require('request')
+const geocode = require('./geocode')
+
+const getForecast = (req, res) => {
+    if (!req.query.location) {
+        return res.send({
+            error: 'You must provide a location'
+        })
+    }
+
+    const city = req.query.location
+    
+    geocode.geocode(city, (error, { longitude, latitude, location } = {}) => {
+        if (!city) {
+            return res.send({
+                error: 'No city provided'
+            })
+        }
+    
+        if (error) {
+            return res.send({
+                error
+            })
+        }
+    
+        getWeather(longitude, latitude, (error, forecast) => {
+            if (error) {
+                return res.send({
+                    error
+                })
+            }
+    
+            res.send ({
+                location,
+                forecast
+            })
+        })
+    })
+}
+
+const getWeather = (long, lat, callback) => {
+    const url = 'http://api.weatherstack.com/current?access_key=9fe2eee8ac4dbdf0cf2e28422bf2e715&query=' + lat + ',' +
+        long + '&units=f'
+
+    request({url, json: true}, (err, { body }) => {
+        if (err) {
+            callback('Unable to connect to weather service', undefined)
+            return
+        }
+
+        if (body.error) {
+            callback('Unable to find location', undefined)
+            return
+        }
+    
+        const current = body.current
+        const location = body.location.region
+        const data = {
+            temperature: current.temperature,
+            rain: current.precip,
+            location
+        }
+
+        callback(undefined, data)
+    })
+}
+
+module.exports = {
+    getWeather,
+    getForecast
+}
