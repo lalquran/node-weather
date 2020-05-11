@@ -43,7 +43,7 @@ const getForecast = (req, res) => {
 }
 
 const getWeather = (long, lat, callback) => {
-    const url = 'http://api.weatherstack.com/current?access_key=' + keys.WEATHER_API +'&query=' + lat + ',' +
+    const url = 'http://api.weatherstack.com/current?access_key=' + process.env.WEATHER_API +'&query=' + lat + ',' +
         long + '&units=f'
 
     request({url, json: true}, (err, { body }) => {
