@@ -1,6 +1,5 @@
 const request = require('request')
 const geocode = require('./geocode')
-const keys = require('../constants/keys')
 
 const getForecast = (req, res) => {
     if (!req.query.location) {
