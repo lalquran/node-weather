@@ -1,5 +1,6 @@
 const request = require('request')
 const geocode = require('./geocode')
+const keys = require('../constants/keys')
 
 const getForecast = (req, res) => {
     if (!req.query.location) {
@@ -42,7 +43,7 @@ const getForecast = (req, res) => {
 }
 
 const getWeather = (long, lat, callback) => {
-    const url = 'http://api.weatherstack.com/current?access_key=9fe2eee8ac4dbdf0cf2e28422bf2e715&query=' + lat + ',' +
+    const url = 'http://api.weatherstack.com/current?access_key=' + keys.WEATHER_API +'&query=' + lat + ',' +
         long + '&units=f'
 
     request({url, json: true}, (err, { body }) => {
